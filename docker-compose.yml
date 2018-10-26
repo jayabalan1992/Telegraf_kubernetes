@@ -2,6 +2,7 @@ version: '3'
 services:
   influxdb:
     image: "influxdb"
+    container_name: influxdb
     ports:
      - "8086:8086"
      - "8083:8083" 
@@ -10,13 +11,15 @@ services:
       - $PWD/influxdb.conf:/etc/influxdb/influxdb.conf
     environment: 
       - INFLUXDB_ADMIN_USER=telegraf
-      - INFLUXDB_ADMIN_PASSWORD=telegraf
-#     - INFLUXDB_USER=testuser
-#     - INFLUXDB_USER_PASSWORD=supersecret
- 
+      - INFLUXDB_ADMIN_PASSWORD=password
+      - INFLUXDB_USER=testuser
+      - INFLUXDB_USER_PASSWORD=supersecret
+      - INFLUXDB_DB=telegraf 
+
   telegraf:
     image: "telegraf"
-
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
 
   grafana:
     image: "docker.io/grafana/grafana"
