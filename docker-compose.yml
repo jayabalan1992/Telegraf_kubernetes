@@ -11,16 +11,19 @@ services:
       - $PWD/influxdb.conf:/etc/influxdb/influxdb.conf
     environment: 
       - INFLUXDB_ADMIN_USER=telegraf
-      - INFLUXDB_ADMIN_PASSWORD=password
+      - INFLUXDB_ADMIN_PASSWORD=telegraf
       - INFLUXDB_USER=testuser
       - INFLUXDB_USER_PASSWORD=supersecret
       - INFLUXDB_DB=telegraf 
 
   telegraf:
     image: "telegraf"
+    environment:
+      - HOST_PROC=/host/proc 
     volumes:
-      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
-
+      - /etc/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /proc:/host/proc:ro
+ 
   grafana:
     image: "docker.io/grafana/grafana"
     ports:
